@@ -1,0 +1,18 @@
+from pydantic import BaseModel, Field, ValidationError
+import json
+
+class DocumentMetadata(BaseModel):
+    document_type: str = Field(pattern="^(invoice|receipt|letter|tax_form|other)$")
+    sender: str
+    date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$") # Enforce YYYY-MM-DD
+    requires_action: bool
+
+def validate_extracted_metadata(llm_json_output: str) -> dict:
+    try:
+        parsed_data = json.loads(llm_json_output)
+        validated_data = DocumentMetadata(**parsed_data)
+        return {"status": "success", "data": validated_data.model_dump()}
+    except json.JSONDecodeError:
+        return {"status": "error", "message": "Invalid JSON string."}
+    except ValidationError as e:
+        return {"status": "error", "message": f"Schema validation failed: {e.json()}"}

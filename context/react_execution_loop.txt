@@ -1,0 +1,84 @@
+import json
+from pathlib import Path
+from typing import Callable, Dict, Any, List, Tuple
+
+# ============================================================================
+# Tool Registry Pattern[cite: 13]
+# ============================================================================
+
+def tool_read_file(workspace: Path, args: dict) -> str:
+    target = workspace / args["path"]
+    if not target.exists():
+        return f"ERROR: {args['path']} does not exist"
+    return target.read_text()
+
+def tool_write_file(workspace: Path, args: dict) -> str:
+    target = workspace / args["path"]
+    target.write_text(args["content"])
+    return f"Wrote {len(args['content'])} characters to {args['path']}"
+
+# Dictionary mapping tool names to execution functions[cite: 13]
+TOOLS: Dict[str, Callable] = {
+    "read_file": tool_read_file,
+    "write_file": tool_write_file,
+}
+
+# Standard schema format passed to the LLM[cite: 13]
+TOOL_SPECS = [
+    {
+        "name": "read_file", 
+        "description": "Read a file from the workspace.",
+        "parameters": {"path": "string"}
+    },
+    {
+        "name": "write_file", 
+        "description": "Create or overwrite a file.",
+        "parameters": {"path": "string", "content": "string"}
+    }
+]
+
+# ============================================================================
+# Constrained ReAct Loop Pattern[cite: 13]
+# ============================================================================
+
+def run_agent(model: Callable, task: str, workspace: Path, max_turns: int = 8) -> Tuple[str, List[Dict]]:
+    """
+    Executes the agentic loop until the model stops calling tools[cite: 13].
+    """
+    transcript: List[Dict] = [
+        {"role": "system", "content": "You are a local document organization agent."},
+        {"role": "user", "content": task},
+    ]
+
+    for turn in range(1, max_turns + 1):
+        # Stateless call: the full transcript is sent on every iteration[cite: 13]
+        response = model(transcript)
+        
+        transcript.append({
+            "role": "assistant",
+            "content": response.get("text", ""),
+            "tool_calls": response.get("tool_calls", [])
+        })
+
+        # Stop condition: reply contains no tool calls[cite: 13]
+        if not response.get("tool_calls"):
+            return response.get("text", "Task completed."), transcript
+
+        # Observe step: Execute tools and append results[cite: 13]
+        for call in response["tool_calls"]:
+            tool_name = call["name"]
+            if tool_name in TOOLS:
+                result = TOOLS[tool_name](workspace, call["args"])
+                transcript.append({
+                    "role": "tool",
+                    "name": tool_name,
+                    "content": result
+                })
+            else:
+                transcript.append({
+                    "role": "tool",
+                    "name": tool_name,
+                    "content": f"ERROR: Tool {tool_name} not found."
+                })
+
+    return "(stopped: max_turns reached)", transcript

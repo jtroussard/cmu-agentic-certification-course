@@ -1,0 +1,43 @@
+# mail-organizer-pro dependencies
+# ---------------------------------------------------------------------------
+# Core
+# ---------------------------------------------------------------------------
+pydantic>=2.0
+python-dateutil
+sqlite-vec
+
+# ---------------------------------------------------------------------------
+# PDF ingestion & OCR
+# ---------------------------------------------------------------------------
+pymupdf          # fitz — PDF text extraction
+pytesseract      # OCR fallback for image-based PDFs
+Pillow           # image handling for pytesseract
+
+# ---------------------------------------------------------------------------
+# Local LLM inference  (Apple Metal — M-series Macs)
+# ---------------------------------------------------------------------------
+# IMPORTANT: Do NOT install llama-cpp-python via this file directly.
+# The Metal-accelerated build requires a special install command:
+#
+#   CMAKE_ARGS="-DGGML_METAL=on" pip install llama-cpp-python
+#
+# If you are on CPU-only (non-Apple Silicon), use:
+#   pip install llama-cpp-python
+
+# ---------------------------------------------------------------------------
+# Embeddings (RAG vector store)
+# ---------------------------------------------------------------------------
+sentence-transformers
+huggingface_hub   # model download helper (used by run.py --download-model)
+
+# ---------------------------------------------------------------------------
+# Development / testing
+# ---------------------------------------------------------------------------
+pytest
+pytest-cov
+
+# ---------------------------------------------------------------------------
+# GUI
+# ---------------------------------------------------------------------------
+streamlit
+

@@ -1,0 +1,10 @@
+[client]
+showErrorDetails = true
+
+[server]
+headless = true
+runOnSave = true
+fileWatcherType = "none"
+
+[browser]
+gatherUsageStats = false

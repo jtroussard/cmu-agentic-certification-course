@@ -1,0 +1,93 @@
+{
+  "01_Finance": {
+    "description": "General banking, investments, credit cards, non-property accounts",
+    "entity_rule": "Financial institution or broker name (e.g. Chase, Vanguard, Fidelity, PNC)",
+    "entity_tooltip": "Enter the name of the bank, credit card company, or investment broker. Zero spaces (use underscores).",
+    "default_categories": ["Checking", "Savings", "Credit_Card", "Investments", "Statements", "Taxes"],
+    "category_tooltip": "Select the account type or document category."
+  },
+  "02_Home": {
+    "description": "Physical real estate properties, mortgages, utilities, repairs, maintenance",
+    "entity_rule": "Property address including street, city, and state code: {Street_Address}_{City}_{ST} (e.g. 45_Craighead_St_Pittsburgh_PA)",
+    "entity_tooltip": "MUST include street, city, and 2-letter state code. Never omit city/state. Example: 45_Craighead_St_Pittsburgh_PA",
+    "default_categories": ["Purchase", "Mortgage", "Taxes", "Insurance", "Repairs", "Renovations", "Maintenance", "Utilities", "Contractors", "Warranties"],
+    "category_tooltip": "Repairs = fixing broken items; Maintenance = routine upkeep/pest control; Renovations = structural/aesthetic upgrades; Utilities = recurring services."
+  },
+  "03_Vehicles": {
+    "description": "Cars, motorcycles, trucks, DMV, vehicle repairs, insurance",
+    "entity_rule": "Vehicle year, make, and model: {YYYY}_{Make}_{Model} (e.g. 2019_Ford_Taurus_SHO)",
+    "entity_tooltip": "Format as YYYY_Make_Model with underscores. Never mix vehicles together.",
+    "default_categories": ["Purchase", "DMV", "Insurance", "Maintenance", "Repairs", "Parts", "Modifications", "Recalls", "Sale"],
+    "category_tooltip": "Repairs = fixing defects; Maintenance = oil changes/inspections; DMV = registration/title."
+  },
+  "04_Pets": {
+    "description": "Pet veterinary care, medications, vaccinations, pet insurance",
+    "entity_rule": "Actual pet name (e.g. Bella, Max)",
+    "entity_tooltip": "Enter the pet's name. Use underscores if multi-word.",
+    "default_categories": ["Medical", "Vaccinations", "Medications", "Procedures", "Insurance", "Adoption", "Other"],
+    "category_tooltip": "Select the veterinary or care category for this pet."
+  },
+  "05_Legal": {
+    "description": "Attorneys, general contracts, estate planning (NOT property/vehicle specific)",
+    "entity_rule": "Law firm, legal entity, or matter name (e.g. Estate_Planning, Jones_Law_Firm)",
+    "entity_tooltip": "Name of legal entity or matter. If document relates to a specific house or vehicle, route under 02_Home or 03_Vehicles instead.",
+    "default_categories": ["Contracts", "Estate_Planning", "Correspondence", "Filings", "General"],
+    "category_tooltip": "Select legal category."
+  },
+  "06_Employment": {
+    "description": "Paystubs, W-2s, employment contracts, benefits",
+    "entity_rule": "Employer or company name (e.g. Google, Acme_Corp, CMU)",
+    "entity_tooltip": "Name of employer or organization.",
+    "default_categories": ["Paystubs", "Tax_Forms", "Contracts", "Benefits", "Correspondence"],
+    "category_tooltip": "Select employment document category."
+  },
+  "07_Insurance": {
+    "description": "General personal insurance policies (health, life, disability — NOT vehicle/home specific)",
+    "entity_rule": "Insurance carrier or policy type (e.g. BlueCross_BlueShield, Northwestern_Mutual)",
+    "entity_tooltip": "Carrier name. Property and auto insurance belong under 02_Home or 03_Vehicles.",
+    "default_categories": ["Health", "Dental", "Vision", "Life", "Disability", "Claims"],
+    "category_tooltip": "Select insurance policy type."
+  },
+  "08_Travel": {
+    "description": "Itineraries, bookings, travel receipts, passports",
+    "entity_rule": "Trip name or year (e.g. 2024_Japan, 2025_Conference)",
+    "entity_tooltip": "Destination or trip identifier with year.",
+    "default_categories": ["Itineraries", "Flights", "Lodging", "Receipts"],
+    "category_tooltip": "Select travel category."
+  },
+  "09_Personal": {
+    "description": "Personal identity, medical records, correspondence, memberships",
+    "entity_rule": "Subject or organization (e.g. Medical_Records, Vital_Records, Subscriptions)",
+    "entity_tooltip": "Personal topic or organization name.",
+    "default_categories": ["Medical", "Identification", "Correspondence", "Memberships", "General"],
+    "category_tooltip": "Select personal record type."
+  },
+  "10_Rental_Property": {
+    "description": "Rental income properties with tenant sub-entities",
+    "entity_rule": "Property address including city/state: {Street_Address}_{City}_{ST}",
+    "entity_tooltip": "Full property address with city and state code.",
+    "default_categories": ["Tenants", "Leases", "Expenses", "Mortgage", "Taxes", "Maintenance"],
+    "category_tooltip": "Select rental property operational category."
+  },
+  "11_Taxes": {
+    "description": "Annual tax filings, IRS / state filings, year-end forms",
+    "entity_rule": "Tax year: {YYYY} (e.g. 2023, 2024, 2025)",
+    "entity_tooltip": "Four-digit tax filing year.",
+    "default_categories": ["Federal", "State", "Local", "Supporting_Docs", "Returns"],
+    "category_tooltip": "Select tax jurisdiction or document stage."
+  },
+  "90_Archive": {
+    "description": "Historical records and closed accounts",
+    "entity_rule": "Historical topic or year",
+    "entity_tooltip": "Archive category.",
+    "default_categories": ["Closed_Accounts", "Old_Records", "General"],
+    "category_tooltip": "Select archive category."
+  },
+  "99_Unsorted": {
+    "description": "Fallback for strictly unrecognizable or unreadable files",
+    "entity_rule": "General",
+    "entity_tooltip": "Use when document cannot be classified into any domain.",
+    "default_categories": ["Needs_Review", "Unreadable"],
+    "category_tooltip": "Fallback category."
+  }
+}

@@ -1,0 +1,52 @@
+from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+
+# Explicit state dictionary shared across the workflow[cite: 14]
+class MailOrganizerState(TypedDict):
+    file_path: str
+    extracted_json: dict
+    confidence_score: float
+    validation_error: str
+    final_destination: str
+
+def extraction_agent(state: MailOrganizerState) -> MailOrganizerState:
+    # Logic to parse OCR and output Pydantic JSON goes here
+    return state
+
+def verification_agent(state: MailOrganizerState) -> MailOrganizerState:
+    # Logic to enforce schema, Anchor Key validation, and DB lookup goes here
+    return state
+
+def manual_review(state: MailOrganizerState) -> MailOrganizerState:
+    # Graceful failover node[cite: 14]
+    return state
+
+def route_after_extraction(state: MailOrganizerState) -> str:
+    # Conditional fork to handle errors or low confidence[cite: 14]
+    if state.get("confidence_score", 0.0) < 0.85 or state.get("validation_error"):
+        return "manual_review"
+    return "verification_agent"
+
+def build_mail_pipeline():
+    # Initialize the graph with the state schema[cite: 14]
+    graph = StateGraph(MailOrganizerState)
+    
+    # Add the distinct agent roles and the failover node[cite: 14]
+    graph.add_node("extraction_agent", extraction_agent)
+    graph.add_node("verification_agent", verification_agent)
+    graph.add_node("manual_review", manual_review)
+    
+    # Build explicit execution dependencies[cite: 14]
+    graph.add_edge(START, "extraction_agent")
+    
+    # Route to failover on error or proceed to verification[cite: 14]
+    graph.add_conditional_edges(
+        "extraction_agent", 
+        route_after_extraction, 
+        {"verification_agent": "verification_agent", "manual_review": "manual_review"}
+    )
+    
+    graph.add_edge("verification_agent", END)
+    graph.add_edge("manual_review", END)
+    
+    return graph.compile()

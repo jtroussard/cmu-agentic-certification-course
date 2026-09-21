@@ -1,0 +1,14 @@
+import pathlib
+
+class UnauthorizedDirectoryError(Exception):
+    pass
+
+def secure_file_fence(target_path_str: str, allowed_directories: list[str]) -> pathlib.Path:
+    target_path = pathlib.Path(target_path_str).resolve()
+
+    for allowed_dir in allowed_directories:
+        allowed_path = pathlib.Path(allowed_dir).resolve()
+        if target_path.is_relative_to(allowed_path):
+            return target_path
+
+    raise UnauthorizedDirectoryError(f"Access denied: {target_path} is outside allowed zones.")
