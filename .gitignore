@@ -99,3 +99,5 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+test-ingestion-docs/*
